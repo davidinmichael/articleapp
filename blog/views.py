@@ -41,6 +41,12 @@ class ArticleUpdate(APIView):
         article.delete()
         return Response({'message': 'Blog Successfully Deleted'}, status=status.HTTP_200_OK)
 
+class CategoryList(APIView):
+    def get(self, request):
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class UserList(APIView):
     pass
 
