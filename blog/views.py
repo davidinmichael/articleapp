@@ -39,7 +39,7 @@ class ArticleUpdate(APIView):
     def delete(self, request, pk):
         article = Article.objects.get(is_public=True, pk=pk)
         article.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response({'message': 'Blog Successfully Deleted'}, status=status.HTTP_200_OK)
 
 class UserList(APIView):
     pass
