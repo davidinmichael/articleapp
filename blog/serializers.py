@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from .models import *
 
 class ArticleSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Article
         fields = ['author', 'id', 'title', 'content', 'date_posted']
