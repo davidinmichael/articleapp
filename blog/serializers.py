@@ -36,3 +36,8 @@ class CategorySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'name': {'read_only': True}
         }
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']

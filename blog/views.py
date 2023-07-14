@@ -1,4 +1,4 @@
-from urllib.parse import parse_qsl
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -48,8 +48,19 @@ class CategoryList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserList(APIView):
-    pass
-
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)        
+    
 class UserDetail(APIView):
-    pass
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        serializer = UserSerializer(user)
+        articles = Article.objects.filter(author=user)
+        serializedArticles = ArticleSerializer(articles, many=True)
+        return Response({
+            'user': serializer.data,
+            'articles': serializedArticles.data
+        })
     
