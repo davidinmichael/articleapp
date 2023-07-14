@@ -4,7 +4,8 @@ from .models import *
 
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
-    category = serializers.StringRelatedField()
+    # category = serializers.StringRelatedField()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
         model = Article
