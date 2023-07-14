@@ -14,7 +14,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='category')
+    category = models.ForeignKey(Category, related_name='articles', on_delete=models.SET_NULL, null=True, blank=True)
     date_posted = models.DateField(default=date.today)
     is_public = models.BooleanField(default=True)
     slug = models.CharField(max_length=800, blank=True)

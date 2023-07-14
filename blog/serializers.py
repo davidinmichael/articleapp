@@ -29,9 +29,10 @@ class ArticleSerializer(serializers.ModelSerializer):
     #     return representation
 
 class CategorySerializer(serializers.ModelSerializer):
+    articles = ArticleSerializer(read_only=True, many=True)
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['name', 'articles']
         extra_kwargs = {
             'name': {'read_only': True}
         }
