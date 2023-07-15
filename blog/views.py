@@ -63,4 +63,6 @@ class UserDetail(APIView):
             'user': serializer.data,
             'articles': serializedArticles.data
         })
-    
+
+class UserPosts(APIView):
+    pass
