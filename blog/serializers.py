@@ -41,3 +41,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArticleComment
+        fields = ['comment_author', 'article', 'comment']

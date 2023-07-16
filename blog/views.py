@@ -64,5 +64,8 @@ class UserDetail(APIView):
             'articles': serializedArticles.data
         })
 
-class UserPosts(APIView):
-    pass
+class ArticleCommentView(APIView):
+    def get(self, request, article_id):
+        article_comments = ArticleComment.objects.filter(article_id=article_id)
+        serializer = CommentSerializer(article_comments)
+        return Response(serializer.data)

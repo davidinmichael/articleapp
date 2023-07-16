@@ -26,4 +26,12 @@ class Article(models.Model):
         if not self.slug:
             self.slug = slugify(self.title + '-' + str(self.author))
         return super().save(*args, **kwargs)
-    
+
+class ArticleComment(models.Model):
+    comment = models.TextField()
+    comment_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comment')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='blog_comment')
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.article)
