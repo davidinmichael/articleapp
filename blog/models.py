@@ -18,6 +18,7 @@ class Article(models.Model):
     date_posted = models.DateField(default=date.today)
     is_public = models.BooleanField(default=True)
     slug = models.CharField(max_length=800, blank=True)
+    article_likes = models.ManyToManyField(User, related_name='likes')
 
     def __str__(self):
         return self.title + ' | ' + str(self.author)

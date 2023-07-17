@@ -1,3 +1,4 @@
+from tokenize import Comment
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -67,5 +68,38 @@ class UserDetail(APIView):
 class ArticleCommentView(APIView):
     def get(self, request, article_id):
         article_comments = ArticleComment.objects.filter(article_id=article_id)
-        serializer = CommentSerializer(article_comments)
+        serializer = CommentSerializer(article_comments, many=True)
+        return Response({"comments": serializer.data})
+    
+    def post(self, request, article_id):
+        article = get_object_or_404(Article, id=article_id)
+        comment = ArticleComment(article=article, comment_author=request.user, comment=request.data['comment'])
+        comment.save()
+        serializer = CommentSerializer(comment)
         return Response(serializer.data)
+
+class ArticleLikes(APIView):
+    def post(self, request, pk):
+        article = get_object_or_404(Article, id=pk)
+        if article.article_likes.filter(id=request.user.id).exists():
+            article.article_likes.remove(request.user)
+            article.save()
+            return Response({'message': 'Article Disliked Successfully'})
+        else:
+            article.article_likes.add(request.user)
+            article.save()
+            return Response({'message': 'Article Liked Successfully'})
+
+# class ArticleLikes(APIView):
+#     def post(self, request, pk):
+#         article = Article.objects.get(id=pk)
+#         article.like += 1
+#         article.save()
+#         return Response({'message': 'Article Liked Successfully'})
+
+# class ArticleDislikes(APIView):
+#     def post(self, request, pk):
+#         article = Article.objects.get(id=pk)
+#         article.dislike -= 1
+#         article.save()
+#         return Response({'message': 'Article Disliked Successfully'})

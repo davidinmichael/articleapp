@@ -11,10 +11,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['author', 'id', 'title', 'content', 'category', 'date_posted']
+        fields = ['author', 'id', 'title', 'content', 'category', 'article_likes', 'date_posted']
         extra_kwargs = {
             'author': {'read_only': True},
-            'id': {'read_only': True}
+            'id': {'read_only': True},
+            'article_likes': {'read_only': True}
         }
 
     def update(self, instance, validated_data):
@@ -43,6 +44,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username']
 
 class CommentSerializer(serializers.ModelSerializer):
+    comment_author = serializers.StringRelatedField(read_only=True)
+    article = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = ArticleComment
-        fields = ['comment_author', 'article', 'comment']
+        fields = ['comment_author', 'article', 'comment', 'created_at']
