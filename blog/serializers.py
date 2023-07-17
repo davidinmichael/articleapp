@@ -4,8 +4,7 @@ from .models import *
 
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
-    # category = serializers.StringRelatedField()
-    # category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    article_likes = serializers.StringRelatedField(many=True)
     category = serializers.SlugRelatedField(queryset=Category.objects.all(),
                                             slug_field='name', allow_null=True)
 
@@ -23,11 +22,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.content = validated_data.get('content', instance.content)
         instance.save()
         return instance
-
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['category'] = instance.category.name
-    #     return representation
 
 class CategorySerializer(serializers.ModelSerializer):
     articles = ArticleSerializer(read_only=True, many=True)

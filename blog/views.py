@@ -78,28 +78,38 @@ class ArticleCommentView(APIView):
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
+# class ArticleLikes(APIView):
+#     def post(self, request, pk):
+#         article = get_object_or_404(Article, id=pk)
+#         if article.article_likes.filter(id=request.user.id).exists():
+#             article.article_likes.remove(request.user)
+#             article.save()
+#             return Response({'message': 'Article Disliked Successfully'})
+#         else:
+#             article.article_likes.add(request.user)
+#             article.save()
+#             return Response({'message': 'Article Liked Successfully'})
+
 class ArticleLikes(APIView):
     def post(self, request, pk):
         article = get_object_or_404(Article, id=pk)
-        if article.article_likes.filter(id=request.user.id).exists():
-            article.article_likes.remove(request.user)
-            article.save()
-            return Response({'message': 'Article Disliked Successfully'})
+        user = request.user
+
+        if article.article_likes.filter(id=user.id).exists():
+            article.article_likes.remove(user)
+            message = 'Article Disliked Successfully'
+            liked = False
         else:
-            article.article_likes.add(request.user)
-            article.save()
-            return Response({'message': 'Article Liked Successfully'})
+            article.article_likes.add(user)
+            message = 'Article Liked Successfully'
+            liked = True
 
-# class ArticleLikes(APIView):
-#     def post(self, request, pk):
-#         article = Article.objects.get(id=pk)
-#         article.like += 1
-#         article.save()
-#         return Response({'message': 'Article Liked Successfully'})
+        article.save()
 
-# class ArticleDislikes(APIView):
-#     def post(self, request, pk):
-#         article = Article.objects.get(id=pk)
-#         article.dislike -= 1
-#         article.save()
-#         return Response({'message': 'Article Disliked Successfully'})
+        response_data = {
+            'message': message,
+            'total_likes': article.article_likes.count(),
+            'liked': liked,
+        }
+
+        return Response(response_data)
