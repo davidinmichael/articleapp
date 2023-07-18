@@ -9,5 +9,5 @@ urlpatterns = [
     path("users/<str:username>/", views.UserDetail.as_view(), name="user-detail"),
     path("blog-comment/<str:article_id>/", views.ArticleCommentView.as_view(), name="article-comment"),
     path("article-like/<int:pk>/", views.ArticleLikes.as_view(), name='like'),
-    # path("article-dislike/<int:pk>/", views.ArticleDislikes.as_view(), name='dislike'),
+    path("liked-articles/<int:pk>/", views.UserLikedArticles.as_view(), name="liked_articles"),
 ]

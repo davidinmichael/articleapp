@@ -9,7 +9,7 @@ from .models import *
 
 class ArticleListCreate(APIView):
     def get(self, request):
-        articles = Article.objects.filter(is_public=True)
+        articles = Article.objects.filter(is_public=True).order_by('-id')
         serializer = ArticleSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -78,18 +78,6 @@ class ArticleCommentView(APIView):
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
-# class ArticleLikes(APIView):
-#     def post(self, request, pk):
-#         article = get_object_or_404(Article, id=pk)
-#         if article.article_likes.filter(id=request.user.id).exists():
-#             article.article_likes.remove(request.user)
-#             article.save()
-#             return Response({'message': 'Article Disliked Successfully'})
-#         else:
-#             article.article_likes.add(request.user)
-#             article.save()
-#             return Response({'message': 'Article Liked Successfully'})
-
 class ArticleLikes(APIView):
     def post(self, request, pk):
         article = get_object_or_404(Article, id=pk)
@@ -112,4 +100,16 @@ class ArticleLikes(APIView):
             'liked': liked,
         }
 
+        return Response(response_data)
+
+class UserLikedArticles(APIView):
+    def get(self, request, pk):
+        user = User.objects.get(id=pk)
+        liked_articles = Article.objects.filter(article_likes=user).order_by('-id')
+        user_serializer = UserSerializer(user)
+        articles_serialized = ArticleSerializer(liked_articles, many=True)
+        response_data = {
+            "user": user_serializer.data,
+            "articles": articles_serialized.data,
+        }
         return Response(response_data)
