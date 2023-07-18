@@ -49,10 +49,20 @@ class ArticleUpdate(APIView):
         return Response({'message': 'Blog Successfully Deleted'}, status=status.HTTP_200_OK)
 
 class CategoryList(APIView):
+    permission_classes = [CategoryPermission]
+    
     def get(self, request):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
 class UserList(APIView):
     def get(self, request):

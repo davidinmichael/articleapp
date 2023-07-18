@@ -7,3 +7,10 @@ class IsOwnerOrReadOnly(BasePermission):
             return True
         else:
             return obj.author == request.user
+
+class CategoryPermission(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        else:
+            return request.user.is_superuser
