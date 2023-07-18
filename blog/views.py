@@ -6,8 +6,12 @@ from rest_framework.views import APIView
 from .serializers import *
 from django.contrib.auth.models import User
 from .models import *
+from rest_framework import permissions
+from .permissions import *
 
 class ArticleListCreate(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         articles = Article.objects.filter(is_public=True).order_by('-id')
         serializer = ArticleSerializer(articles, many=True)
@@ -23,6 +27,8 @@ class ArticleListCreate(APIView):
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         
 class ArticleUpdate(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
+
     def get(self, request, pk):
         article = Article.objects.get(is_public=True, id=pk)
         serializer = ArticleSerializer(article)
