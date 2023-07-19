@@ -22,3 +22,10 @@ def register_view(request):
         else:
             data = serializer.errors
     return Response(data)
+
+@api_view(['POST',])
+@permission_classes([permissions.IsAuthenticated])
+def logout_view(request):
+    if request.method == "POST":
+        request.user.auth_token.delete()
+        return Response({"message": "You are logged out, Login to continue"})

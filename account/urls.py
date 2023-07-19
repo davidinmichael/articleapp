@@ -5,4 +5,5 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path("register/", views.register_view, name="register"),
     path("login/", obtain_auth_token, name="login"),
+    path("logout/", views.logout_view, name="logout"),
 ]
