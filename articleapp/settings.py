@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # my installed apps
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'blog',
     'account',
 ]
@@ -132,6 +133,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication'
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
