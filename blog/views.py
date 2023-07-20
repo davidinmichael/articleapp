@@ -6,10 +6,11 @@ from rest_framework.views import APIView
 from .serializers import *
 from django.contrib.auth.models import User
 from .models import *
-from rest_framework import permissions
+from rest_framework import permissions, authentication
 from .permissions import *
 
 class ArticleListCreate(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
