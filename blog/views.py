@@ -10,7 +10,7 @@ from rest_framework import permissions, authentication
 from .permissions import *
 
 class ArticleListCreate(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
+    # authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
@@ -25,7 +25,7 @@ class ArticleListCreate(APIView):
             article_serializer = ArticleSerializer(article)
             return Response(article_serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class ArticleUpdate(APIView):
     permission_classes = [IsOwnerOrReadOnly]
