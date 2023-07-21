@@ -10,7 +10,6 @@ from rest_framework import permissions, authentication
 from .permissions import *
 
 class ArticleListCreate(APIView):
-    # authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
@@ -83,6 +82,8 @@ class UserDetail(APIView):
         })
 
 class ArticleCommentView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get(self, request, article_id):
         article_comments = ArticleComment.objects.filter(article_id=article_id)
         serializer = CommentSerializer(article_comments, many=True)
@@ -96,6 +97,8 @@ class ArticleCommentView(APIView):
         return Response(serializer.data)
 
 class ArticleLikes(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
     def post(self, request, pk):
         article = get_object_or_404(Article, id=pk)
         user = request.user

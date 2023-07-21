@@ -32,6 +32,7 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
+    
     def post(self, request):
         if request.method == 'POST':
             username = request.data.get('username')
