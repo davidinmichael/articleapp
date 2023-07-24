@@ -8,23 +8,34 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework import permissions, authentication
 from .permissions import *
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import ListCreateAPIView
 
-class ArticleListCreate(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+class ArticleListCreate(ListCreateAPIView):
+    queryset = Article.objects.filter(is_public=True).order_by('-id')
+    serializer_class = ArticleSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['category', 'date_posted']
+    search_fields = ['title', 'content', 'author__username']
 
-    def get(self, request):
-        articles = Article.objects.filter(is_public=True).order_by('-id')
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# class ArticleListCreate(APIView):
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+#     def get(self, request):
+#         articles = Article.objects.filter(is_public=True).order_by('-id')
+#         serializer = ArticleSerializer(articles, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid():
-            article = serializer.save(author=request.user)
-            article_serializer = ArticleSerializer(article)
-            return Response(article_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = ArticleSerializer(data=request.data)
+#         if serializer.is_valid():
+#             article = serializer.save(author=request.user)
+#             article_serializer = ArticleSerializer(article)
+#             return Response(article_serializer.data, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class ArticleUpdate(APIView):
     permission_classes = [IsOwnerOrReadOnly]
