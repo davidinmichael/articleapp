@@ -11,12 +11,14 @@ from .permissions import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListCreateAPIView
+from .filters import ArticleFilter
 
 class ArticleListCreate(ListCreateAPIView):
     queryset = Article.objects.filter(is_public=True).order_by('-id')
     serializer_class = ArticleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['category', 'date_posted']
+    # filterset_fields = ['category__name', 'date_posted']
+    filterset_class = ArticleFilter
     search_fields = ['title', 'content', 'author__username']
 
 
