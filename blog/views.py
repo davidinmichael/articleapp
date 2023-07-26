@@ -1,4 +1,3 @@
-from tokenize import Comment
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -6,7 +5,7 @@ from rest_framework.views import APIView
 from .serializers import *
 from django.contrib.auth.models import User
 from .models import *
-from rest_framework import permissions, authentication
+from rest_framework import permissions
 from .permissions import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
